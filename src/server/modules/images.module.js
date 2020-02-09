@@ -64,27 +64,31 @@ export const insertImage = (payload) => new Promise((resolve, reject) => {
 });
 
 export const deleteOneImageByImageID = (imageID) => new Promise((resolve, reject) => {
-  MongoClient.connect(mLabUrl, { useNewUrlParser: true }, (connectError, client) => {
-    if (connectError) {
-      reject(connectError);
-    }
-    assert.strictEqual(connectError, null);
+  MongoClient.connect(
+    mLabUrl,
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    (connectError, client) => {
+      if (connectError) {
+        reject(connectError);
+      }
+      assert.strictEqual(connectError, null);
 
-    const collection = client.db(mLabDBName).collection('images');
+      const collection = client.db(mLabDBName).collection('images');
 
-    collection.findOne({ imageID })
-      .then((result) => {
-        assert.strictEqual(result, null);
+      collection.findOne({ imageID })
+        .then((result) => {
+          assert.strictEqual(result, null);
 
-        collection.deleteOne({ imageID })
-          .then((deleteResult) => resolve(deleteResult))
-          .catch((deleteError) => reject(deleteError));
-      })
-      .catch((error) => {
-        reject(error);
-      })
-      .then(() => {
-        client.close();
-      });
-  });
+          collection.deleteOne({ imageID })
+            .then((deleteResult) => resolve(deleteResult))
+            .catch((deleteError) => reject(deleteError));
+        })
+        .catch((error) => {
+          reject(error);
+        })
+        .then(() => {
+          client.close();
+        });
+    },
+  );
 });

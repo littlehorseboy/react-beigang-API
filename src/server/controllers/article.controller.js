@@ -1,8 +1,15 @@
 import {
+  selectArticles,
   selectArticleByArticleID,
   insertArticle,
   deleteOneArticleByArticleID,
 } from '../modules/articles.module';
+
+export const getArticles = (req, res) => {
+  selectArticles()
+    .then((result) => res.status(200).send(result))
+    .catch((error) => res.status(404).send(error));
+};
 
 export const getArticleByArticleID = (req, res) => {
   selectArticleByArticleID(req.params.articleID)

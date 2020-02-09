@@ -4,29 +4,62 @@ import config from '../../config/config';
 
 const { mLabUrl, mLabDBName } = config;
 
+export const selectArticles = () => new Promise((resolve, reject) => {
+  MongoClient.connect(
+    mLabUrl,
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    (connectError, client) => {
+      if (connectError) {
+        reject(connectError);
+      }
+      assert.strictEqual(connectError, null);
+
+      const collection = client.db(mLabDBName).collection('articles');
+
+      collection.find({}).toArray()
+        .then((results) => {
+          assert.notStrictEqual(results.length, 0);
+          assert.strictEqual(typeof results, 'object');
+
+          resolve(results);
+        })
+        .catch((error) => {
+          reject(error);
+        })
+        .then(() => {
+          client.close();
+        });
+    },
+  );
+});
+
 export const selectArticleByArticleID = (articleID) => new Promise((resolve, reject) => {
-  MongoClient.connect(mLabUrl, { useNewUrlParser: true }, (connectError, client) => {
-    if (connectError) {
-      reject(connectError);
-    }
-    assert.strictEqual(connectError, null);
+  MongoClient.connect(
+    mLabUrl,
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    (connectError, client) => {
+      if (connectError) {
+        reject(connectError);
+      }
+      assert.strictEqual(connectError, null);
 
-    const collection = client.db(mLabDBName).collection('articles');
+      const collection = client.db(mLabDBName).collection('articles');
 
-    collection.findOne({ articleID })
-      .then((result) => {
-        assert.notStrictEqual(result, null);
-        assert.strictEqual(typeof result, 'object');
+      collection.findOne({ articleID })
+        .then((result) => {
+          assert.notStrictEqual(result, null);
+          assert.strictEqual(typeof result, 'object');
 
-        resolve(result);
-      })
-      .catch((error) => {
-        reject(error);
-      })
-      .then(() => {
-        client.close();
-      });
-  });
+          resolve(result);
+        })
+        .catch((error) => {
+          reject(error);
+        })
+        .then(() => {
+          client.close();
+        });
+    },
+  );
 });
 
 export const insertArticle = (payload) => new Promise((resolve, reject) => {
@@ -60,27 +93,31 @@ export const insertArticle = (payload) => new Promise((resolve, reject) => {
 });
 
 export const deleteOneArticleByArticleID = (imageID) => new Promise((resolve, reject) => {
-  MongoClient.connect(mLabUrl, { useNewUrlParser: true }, (connectError, client) => {
-    if (connectError) {
-      reject(connectError);
-    }
-    assert.strictEqual(connectError, null);
+  MongoClient.connect(
+    mLabUrl,
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    (connectError, client) => {
+      if (connectError) {
+        reject(connectError);
+      }
+      assert.strictEqual(connectError, null);
 
-    const collection = client.db(mLabDBName).collection('articles');
+      const collection = client.db(mLabDBName).collection('articles');
 
-    collection.findOne({ imageID })
-      .then((result) => {
-        assert.strictEqual(result, null);
+      collection.findOne({ imageID })
+        .then((result) => {
+          assert.strictEqual(result, null);
 
-        collection.deleteOne({ imageID })
-          .then((deleteResult) => resolve(deleteResult))
-          .catch((deleteError) => reject(deleteError));
-      })
-      .catch((error) => {
-        reject(error);
-      })
-      .then(() => {
-        client.close();
-      });
-  });
+          collection.deleteOne({ imageID })
+            .then((deleteResult) => resolve(deleteResult))
+            .catch((deleteError) => reject(deleteError));
+        })
+        .catch((error) => {
+          reject(error);
+        })
+        .then(() => {
+          client.close();
+        });
+    },
+  );
 });

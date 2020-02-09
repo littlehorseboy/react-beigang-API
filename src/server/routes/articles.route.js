@@ -1,11 +1,14 @@
 import express from 'express';
 import {
+  getArticles,
   getArticleByArticleID,
   postArticle,
   deleteArticleByArticleID,
 } from '../controllers/article.controller';
 
 const router = express.Router();
+
+router.route('/').get(getArticles);
 
 router.route('/:articleID').get(getArticleByArticleID);
 
