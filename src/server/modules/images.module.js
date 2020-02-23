@@ -18,7 +18,7 @@ export const selectImagesByArticleID = (articleID) => new Promise((resolve, reje
 
       collection.find({ articleID }).toArray()
         .then((results) => {
-          assert.notStrictEqual(results.length, 0);
+          // assert.notStrictEqual(results.length, 0);
           assert.strictEqual(typeof results, 'object');
 
           resolve(results);
