@@ -34,6 +34,12 @@ export const putArticleByArticleID = (req, res) => {
     .catch((error) => res.status(400).send(error));
 };
 
+export const patchArticleByArticleID = (req, res) => {
+  updateOneArticleByArticleID(req.params.articleID, { ...req.body })
+    .then(() => res.status(204).send())
+    .catch((error) => res.status(400).send(error));
+};
+
 export const deleteArticleByArticleID = (req, res) => {
   deleteOneArticleByArticleID(req.params.articleID)
     .then(() => res.status(204).send())
