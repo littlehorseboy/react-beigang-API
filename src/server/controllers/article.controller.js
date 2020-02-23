@@ -6,6 +6,8 @@ import {
   deleteOneArticleByArticleID,
 } from '../modules/articles.module';
 
+import { deleteImagesByArticleID } from '../modules/images.module';
+
 export const getArticles = (req, res) => {
   selectArticles()
     .then((result) => res.status(200).send(result))
@@ -41,7 +43,14 @@ export const patchArticleByArticleID = (req, res) => {
 };
 
 export const deleteArticleByArticleID = (req, res) => {
-  deleteOneArticleByArticleID(req.params.articleID)
+  Promise.all([
+    new Promise((resolve, reject) => deleteOneArticleByArticleID(req.params.articleID)
+      .then(() => resolve())
+      .catch(() => reject())),
+    new Promise((resolve, reject) => deleteImagesByArticleID(req.params.articleID)
+      .then(() => resolve())
+      .catch(() => reject())),
+  ])
     .then(() => res.status(204).send())
     .catch((error) => res.status(404).send(error));
 };
