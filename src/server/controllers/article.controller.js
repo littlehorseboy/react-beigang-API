@@ -2,6 +2,7 @@ import {
   selectArticles,
   selectArticleByArticleID,
   insertArticle,
+  updateOneArticleByArticleID,
   deleteOneArticleByArticleID,
 } from '../modules/articles.module';
 
@@ -25,6 +26,12 @@ export const postArticle = (req, res) => {
       .then(() => res.status(204).send())
       .catch((error) => res.status(400).send(error));
   }
+};
+
+export const putArticleByArticleID = (req, res) => {
+  updateOneArticleByArticleID(req.params.articleID, { ...req.body })
+    .then(() => res.status(204).send())
+    .catch((error) => res.status(400).send(error));
 };
 
 export const deleteArticleByArticleID = (req, res) => {

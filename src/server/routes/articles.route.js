@@ -3,6 +3,7 @@ import {
   getArticles,
   getArticleByArticleID,
   postArticle,
+  putArticleByArticleID,
   deleteArticleByArticleID,
 } from '../controllers/article.controller';
 
@@ -13,6 +14,8 @@ router.route('/').get(getArticles);
 router.route('/:articleID').get(getArticleByArticleID);
 
 router.route('/').post(postArticle);
+
+router.route('/:articleID').put(putArticleByArticleID);
 
 router.route('/:articleID').delete(deleteArticleByArticleID);
 

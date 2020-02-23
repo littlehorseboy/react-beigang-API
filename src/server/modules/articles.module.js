@@ -92,6 +92,38 @@ export const insertArticle = (payload) => new Promise((resolve, reject) => {
   );
 });
 
+export const updateOneArticleByArticleID = (
+  articleID, payload,
+) => new Promise((resolve, reject) => {
+  MongoClient.connect(
+    mLabUrl,
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    (connectError, client) => {
+      if (connectError) {
+        reject(connectError);
+      }
+      assert.strictEqual(connectError, null);
+
+      const collection = client.db(mLabDBName).collection('articles');
+
+      collection.findOne({ articleID })
+        .then((result) => {
+          assert.notStrictEqual(result, null);
+
+          collection.updateOne({ articleID }, { $set: { ...payload } })
+            .then((updateResult) => resolve(updateResult))
+            .catch((updateError) => reject(updateError));
+        })
+        .catch((error) => {
+          reject(error);
+        })
+        .then(() => {
+          client.close();
+        });
+    },
+  );
+});
+
 export const deleteOneArticleByArticleID = (articleID) => new Promise((resolve, reject) => {
   MongoClient.connect(
     mLabUrl,
