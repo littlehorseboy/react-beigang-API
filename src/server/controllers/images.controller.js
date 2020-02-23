@@ -1,7 +1,7 @@
 import {
   selectImagesByArticleID,
   insertImage,
-  deleteOneImageByImageID,
+  deleteOneImageByImageIDAndName,
 } from '../modules/images.module';
 
 export const getImagesByArticleID = (req, res) => {
@@ -22,8 +22,8 @@ export const postImage = (req, res) => {
   }
 };
 
-export const deleteImageByImageID = (req, res) => {
-  deleteOneImageByImageID(req.params.imageID)
+export const deleteImageByImageIDAndName = (req, res) => {
+  deleteOneImageByImageIDAndName(req.params.imageID, req.params.name)
     .then(() => res.status(204).end())
     .catch((error) => res.status(404).send(error));
 };

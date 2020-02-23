@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-  getImagesByArticleID, postImage, deleteImageByImageID,
+  getImagesByArticleID, postImage, deleteImageByImageIDAndName,
 } from '../controllers/images.controller';
 
 const router = express.Router();
@@ -9,6 +9,6 @@ router.route('/:articleID').get(getImagesByArticleID);
 
 router.route('/').post(postImage);
 
-router.route('/:imageID').delete(deleteImageByImageID);
+router.route('/:imageID/:name').delete(deleteImageByImageIDAndName);
 
 export default router;

@@ -63,7 +63,7 @@ export const insertImage = (payload) => new Promise((resolve, reject) => {
   );
 });
 
-export const deleteOneImageByImageID = (imageID) => new Promise((resolve, reject) => {
+export const deleteOneImageByImageIDAndName = (imageID, name) => new Promise((resolve, reject) => {
   MongoClient.connect(
     mLabUrl,
     { useNewUrlParser: true, useUnifiedTopology: true },
@@ -75,11 +75,11 @@ export const deleteOneImageByImageID = (imageID) => new Promise((resolve, reject
 
       const collection = client.db(mLabDBName).collection('images');
 
-      collection.findOne({ imageID })
+      collection.findOne({ imageID, name })
         .then((result) => {
-          assert.strictEqual(result, null);
+          assert.notStrictEqual(result, null);
 
-          collection.deleteOne({ imageID })
+          collection.deleteOne({ imageID, name })
             .then((deleteResult) => resolve(deleteResult))
             .catch((deleteError) => reject(deleteError));
         })
